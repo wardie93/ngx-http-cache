@@ -4,18 +4,15 @@ import { NgxHttpCacheInterceptor } from './ngx-http-cache.interceptor';
 import {
     DEFAULT_OPTIONS,
     NgxHttpCacheOptions,
-    NGX_OBSERVABLE_CACHE_OPTIONS
+    NGX_HTTP_CACHE_OPTIONS
 } from './ngx-http-cache.options';
 
-export interface ObservableCacheProviderOptions {
+export interface NgxHttpCacheProviderOptions {
     provider?: Provider;
     config?: NgxHttpCacheOptions;
 }
 
 @NgModule({
-    declarations: [],
-    imports: [],
-    exports: [],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
@@ -26,13 +23,13 @@ export interface ObservableCacheProviderOptions {
 })
 export class NgxHttpCacheModule {
     static forRoot(
-        options?: ObservableCacheProviderOptions
+        options?: NgxHttpCacheProviderOptions
     ): ModuleWithProviders<NgxHttpCacheModule> {
         return {
             ngModule: NgxHttpCacheModule,
             providers: [
                 options?.provider || {
-                    provide: NGX_OBSERVABLE_CACHE_OPTIONS,
+                    provide: NGX_HTTP_CACHE_OPTIONS,
                     useValue: setDefaultOptions(options?.config)
                 }
             ]
@@ -40,11 +37,11 @@ export class NgxHttpCacheModule {
     }
 }
 
-function setDefaultOptions(
-    options?: NgxHttpCacheOptions
-): NgxHttpCacheOptions {
+function setDefaultOptions(options?: NgxHttpCacheOptions): NgxHttpCacheOptions {
     const defaultOptions = DEFAULT_OPTIONS;
     return {
-        behavior: options?.behavior || defaultOptions.behavior,
+        behavior: options?.behavior ?? defaultOptions.behavior,
+        localStorage: options?.localStorage ?? defaultOptions.localStorage,
+        methods: options?.methods ?? defaultOptions.methods
     };
 }

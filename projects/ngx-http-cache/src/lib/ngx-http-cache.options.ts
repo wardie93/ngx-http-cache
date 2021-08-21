@@ -1,24 +1,29 @@
 import { InjectionToken } from '@angular/core';
 
-export const NGX_OBSERVABLE_CACHE_OPTIONS = new InjectionToken(
-    'NGX_OBSERVABLE_CACHE_OPTIONS'
+export const NGX_HTTP_CACHE_OPTIONS = new InjectionToken(
+    'NGX_HTTP_CACHE_OPTIONS'
 );
 
 export enum NgxHttpCacheHeaders {
     Cache = 'ngx-http-cache',
-    NoCache = 'ngx-http-cache-none',
+    CacheLocalStorage = 'ngx-http-cache-local-storage',
+    CacheReset = 'ngx-http-cache-reset'
 }
 
 export enum NgxHttpCacheBehavior {
-    Default = 0,
-    PageLevel = 1,
-    All = 2
+    PageLevel = 'PageLevel',
+    All = 'All',
+    None = 'None'
 }
 
 export interface NgxHttpCacheOptions {
-    behavior: NgxHttpCacheBehavior;
+    behavior?: NgxHttpCacheBehavior;
+    localStorage?: boolean;
+    methods?: string[];
 }
 
 export const DEFAULT_OPTIONS: NgxHttpCacheOptions = {
-    behavior: NgxHttpCacheBehavior.Default
+    behavior: NgxHttpCacheBehavior.All,
+    localStorage: false,
+    methods: ['GET']
 };
