@@ -11,6 +11,12 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "paths": {
+      "ngx-observable-cache": [
+        "dist/ngx-observable-cache/ngx-observable-cache",
+        "dist/ngx-observable-cache"
+      ]
+    },
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
