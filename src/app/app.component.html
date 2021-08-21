@@ -9,7 +9,9 @@
 
 <style>
     :host {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol';
         font-size: 14px;
         color: #333;
         box-sizing: border-box;
@@ -185,7 +187,7 @@
     }
 
     .terminal::before {
-        content: "\2022 \2022 \2022";
+        content: '\2022 \2022 \2022';
         position: absolute;
         top: 0;
         left: 0;
@@ -244,18 +246,20 @@
         align-items: center;
         font-size: 12px;
         padding: 3px 10px;
-        border: 1px solid rgba(27, 31, 35, .2);
+        border: 1px solid rgba(27, 31, 35, 0.2);
         border-radius: 3px;
         background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
         margin-left: 4px;
         font-weight: 600;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica,
+            Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+            Segoe UI Symbol;
     }
 
     .github-star-badge:hover {
         background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);
-        border-color: rgba(27, 31, 35, .35);
-        background-position: -.5em;
+        border-color: rgba(27, 31, 35, 0.35);
+        background-position: -0.5em;
     }
 
     .github-star-badge .material-icons {
@@ -271,7 +275,6 @@
         z-index: -10;
         width: 1920px;
     }
-
 
     /* Responsive Styles */
     @media screen and (max-width: 767px) {
@@ -334,18 +337,22 @@
 <div class="content" role="main">
     <div class="flex flex-column flex-center">
         <div class="margin-y">
-            <label for="fullPageLoading">Replace Cache?</label>
+            <label for="replaceCache">Replace Cache?</label>
             <input type="checkbox" [(ngModel)]="replaceCache"
                 id="replaceCache" />
         </div>
         <div class="margin-y">
-            <label for="testRendering">Opt Out of Cache?</label>
-            <input type="checkbox" [(ngModel)]="optOut" id="optOut" />
+            <label for="behavior" style="margin-right: 5px;">Behavior</label>
+            <select [(ngModel)]="behavior">
+                <option [ngValue]="undefined">Not set</option>
+                <option *ngFor="let option of behaviors"
+                    [ngValue]="option.value">
+                    {{ option.display }}
+                </option>
+            </select>
         </div>
         <div class="margin-y">
-            <button (click)="loadingTest()">
-                Loading Test
-            </button>
+            <button (click)="loadingTest()">Loading Test</button>
         </div>
     </div>
 
@@ -360,9 +367,9 @@
             </thead>
             <tbody>
                 <tr *ngFor="let result of results; let isLast = last">
-                    <td>{{result.userId}}</td>
-                    <td>{{result.title}}</td>
-                    <td>{{result.body}}</td>
+                    <td>{{ result.userId }}</td>
+                    <td>{{ result.title }}</td>
+                    <td>{{ result.body }}</td>
                 </tr>
                 <tr *ngIf="!results || results.length === 0">
                     <td colspan="99">No results</td>
