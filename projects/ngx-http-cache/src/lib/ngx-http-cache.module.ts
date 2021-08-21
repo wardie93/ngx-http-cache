@@ -1,10 +1,11 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
+
 import { NgxHttpCacheInterceptor } from './ngx-http-cache.interceptor';
 import {
     DEFAULT_OPTIONS,
+    NGX_HTTP_CACHE_OPTIONS,
     NgxHttpCacheOptions,
-    NGX_HTTP_CACHE_OPTIONS
 } from './ngx-http-cache.options';
 
 export interface NgxHttpCacheProviderOptions {

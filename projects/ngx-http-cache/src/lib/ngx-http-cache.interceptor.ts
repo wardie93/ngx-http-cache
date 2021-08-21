@@ -1,8 +1,14 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+    HttpEvent,
+    HttpHandler,
+    HttpInterceptor,
+    HttpRequest,
+    HttpResponse,
+} from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 import {
     NGX_HTTP_CACHE_OPTIONS,
@@ -27,6 +33,12 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         this.defaultBehavior = this.options.behavior!;
         this.localStorage = this.options.localStorage!;
         this.methods = this.options.methods!;
+
+        this.router.events
+            .pipe(filter($event => $event instanceof NavigationStart))
+            .subscribe(() => {
+                this.cacheService.clear(NgxHttpCacheBehavior.PageLevel);
+            });
     }
 
     private getBehaviorEnum(
@@ -54,9 +66,9 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         // Get the values for the headers first
         const behaviorOverride = headers.get(NgxHttpCacheHeaders.Cache);
         const localStorageOverride = headers.get(
-            NgxHttpCacheHeaders.CacheLocalStorage
+            NgxHttpCacheHeaders.LocalStorage
         );
-        const cacheResetHeader = headers.get(NgxHttpCacheHeaders.CacheReset);
+        const cacheResetHeader = headers.get(NgxHttpCacheHeaders.Replace);
 
         // Then clear the values out once you know what they are, and create a new request with them removed as they
         // Should not be sent to the server
@@ -102,7 +114,7 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         );
 
         if (existingValue && !cacheResetHeader) {
-            return of(new HttpResponse(JSON.parse(existingValue)));
+            return of(new HttpResponse(existingValue));
         }
 
         const result = next.handle(request).pipe(
@@ -110,7 +122,7 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
                 if ($event instanceof HttpResponse) {
                     this.cacheService.set(
                         requestKey,
-                        JSON.stringify($event.clone()),
+                        $event.clone(),
                         cachingBehaviorEnum,
                         localStorage
                     );

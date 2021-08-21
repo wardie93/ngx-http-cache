@@ -1,16 +1,13 @@
-import { HttpRequest } from '@angular/common/http';
+import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { NgxHttpCacheBehavior } from './ngx-http-cache.options';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NgxHttpCacheService {
-    private cache: {
-        key: string;
-        behavior: NgxHttpCacheBehavior;
-        value: string;
-    }[] = [];
+    private cache: CachedResponse[] = [];
     private keyPrefix = 'ngx-http-cache';
 
     constructor() { }
@@ -32,6 +29,11 @@ export class NgxHttpCacheService {
         return index;
     }
 
+    private getPrefix(behavior: NgxHttpCacheBehavior): string {
+        const prefix = `${this.keyPrefix}-${behavior}`;
+        return prefix;
+    }
+
     private getKey(
         key: string | undefined,
         behavior: NgxHttpCacheBehavior
@@ -40,7 +42,7 @@ export class NgxHttpCacheService {
             return undefined;
         }
 
-        const prefix = `${this.keyPrefix}-${behavior}`;
+        const prefix = this.getPrefix(behavior);
 
         if (key!.startsWith(prefix)) {
             return key;
@@ -51,9 +53,9 @@ export class NgxHttpCacheService {
 
     set(
         key: string,
-        value: string,
+        value: HttpResponse<unknown>,
         behavior: NgxHttpCacheBehavior,
-        localStorage: boolean
+        useLocalStorage: boolean
     ): void {
         const transformedKey = this.getKey(key, behavior);
 
@@ -61,17 +63,17 @@ export class NgxHttpCacheService {
             return;
         }
 
-        if (!localStorage) {
+        const object: CachedResponse = {
+            key: transformedKey!,
+            value: JSON.stringify(value),
+            behavior: behavior
+        };
+
+        if (!useLocalStorage) {
             const existingIndex = this.getExistingIndex(
                 transformedKey,
                 behavior
             );
-
-            const object = {
-                key: transformedKey!,
-                value: value,
-                behavior: behavior
-            };
 
             if (existingIndex !== -1) {
                 this.cache[existingIndex] = object;
@@ -79,41 +81,61 @@ export class NgxHttpCacheService {
                 this.cache.push(object);
             }
         } else {
+            localStorage.setItem(transformedKey, JSON.stringify(object));
         }
     }
 
     get(
         key: string,
         behavior: NgxHttpCacheBehavior,
-        localStorage: boolean
-    ): string | undefined {
+        useLocalStorage: boolean
+    ): Object | undefined {
         const transformedKey = this.getKey(key, behavior);
 
         if (transformedKey == undefined) {
             return undefined;
         }
 
-        if (!localStorage) {
+        let value: string;
+
+        if (!useLocalStorage) {
             const existingIndex = this.getExistingIndex(
                 transformedKey,
                 behavior
             );
 
-            if (existingIndex !== -1) {
-                return this.cache[existingIndex].value;
+            if (existingIndex === -1) {
+                return undefined;
             }
 
+            value = this.cache[existingIndex].value;
+        } else {
+            const localStorageStringResult =
+                localStorage.getItem(transformedKey);
+
+            if (localStorageStringResult == undefined) {
+                return undefined;
+            }
+
+            const localStorageResult: CachedResponse = JSON.parse(
+                localStorageStringResult
+            );
+
+            value = localStorageResult?.value;
+        }
+
+        if (value == undefined) {
             return undefined;
         }
 
-        return '';
+        return JSON.parse(value);
     }
 
-    clear(behavior: NgxHttpCacheBehavior): void {
+    clear(behavior?: NgxHttpCacheBehavior): void {
         const indicesToRemove: number[] = [];
 
         this.cache.forEach((entry, index) => {
-            if (entry.behavior === behavior) {
+            if (behavior == undefined || entry.behavior === behavior) {
                 indicesToRemove.push(index);
             }
         });
@@ -122,6 +144,25 @@ export class NgxHttpCacheService {
             this.cache.splice(i, 1);
         });
 
+        const localStorageKeysToRemove: string[] = [];
+
+        Object.keys(localStorage).forEach(key => {
+            if (behavior == undefined) {
+                localStorageKeysToRemove.push(key);
+                return;
+            }
+
+            const value = localStorage.getItem(key);
+            const parsedValue: CachedResponse = JSON.parse(value!);
+
+            if (parsedValue && parsedValue.behavior === behavior) {
+                localStorageKeysToRemove.push(key);
+            }
+        });
+
+        localStorageKeysToRemove.forEach(key => {
+            localStorage.removeItem(key);
+        });
     }
 
     createKey(request: HttpRequest<unknown>): string {
@@ -129,4 +170,10 @@ export class NgxHttpCacheService {
         const key = `${request.method}.${request.urlWithParams}.${body}`;
         return key;
     }
+}
+
+class CachedResponse {
+    key!: string;
+    value!: string;
+    behavior!: NgxHttpCacheBehavior;
 }

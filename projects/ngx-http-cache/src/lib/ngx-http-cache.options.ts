@@ -6,8 +6,8 @@ export const NGX_HTTP_CACHE_OPTIONS = new InjectionToken(
 
 export enum NgxHttpCacheHeaders {
     Cache = 'ngx-http-cache',
-    CacheLocalStorage = 'ngx-http-cache-local-storage',
-    CacheReset = 'ngx-http-cache-reset'
+    LocalStorage = 'ngx-http-cache-local-storage',
+    Replace = 'ngx-http-cache-replace'
 }
 
 export enum NgxHttpCacheBehavior {
