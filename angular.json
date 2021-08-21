@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-observable-cache-app": {
+    "ngx-http-cache-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-observable-cache-app",
+            "outputPath": "dist/ngx-http-cache-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -75,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngx-observable-cache-app:build:production"
+              "browserTarget": "ngx-http-cache-app:build:production"
             },
             "development": {
-              "browserTarget": "ngx-observable-cache-app:build:development"
+              "browserTarget": "ngx-http-cache-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-observable-cache-app:build"
+            "browserTarget": "ngx-http-cache-app:build"
           }
         },
         "test": {
@@ -109,23 +109,23 @@
         }
       }
     },
-    "ngx-observable-cache": {
+    "ngx-http-cache": {
       "projectType": "library",
-      "root": "projects/ngx-observable-cache",
-      "sourceRoot": "projects/ngx-observable-cache/src",
+      "root": "projects/ngx-http-cache",
+      "sourceRoot": "projects/ngx-http-cache/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/ngx-observable-cache/ng-package.json"
+            "project": "projects/ngx-http-cache/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-observable-cache/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-http-cache/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ngx-observable-cache/tsconfig.lib.json"
+              "tsConfig": "projects/ngx-http-cache/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -133,13 +133,13 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-observable-cache/src/test.ts",
-            "tsConfig": "projects/ngx-observable-cache/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-observable-cache/karma.conf.js"
+            "main": "projects/ngx-http-cache/src/test.ts",
+            "tsConfig": "projects/ngx-http-cache/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-http-cache/karma.conf.js"
           }
         }
       }
     }
   },
-  "defaultProject": "ngx-observable-cache-app"
+  "defaultProject": "ngx-http-cache-app"
 }

@@ -1,5 +1,5 @@
 {
-  "name": "ngx-observable-cache-app",
+  "name": "ngx-http-cache-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,14 +7,15 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "version:patch": "cd projects/ngx-observable-cache && npm version patch",
-    "version:minor": "cd projects/ngx-observable-cache && npm version patch",
-    "version:major": "cd projects/ngx-observable-cache && npm version patch",
-    "build:lib": "ng build --project=ngx-observable-cache",
-    "build:lib:prod": "ng build --project=ngx-observable-cache --configuration production",
-    "watch:lib": "ng build --project=ngx-observable-cache --watch",
-    "watch:lib:prod": "ng build --project=ngx-observable-cache --watch --configuration production",
-    "publish": "cd dist/ngx-observable-cache && npm publish"
+    "version:patch": "cd projects/ngx-http-cache && npm version patch",
+    "version:minor": "cd projects/ngx-http-cache && npm version patch",
+    "version:major": "cd projects/ngx-http-cache && npm version patch",
+    "build:lib": "ng build --project=ngx-http-cache",
+    "build:lib:prod": "ng build --project=ngx-http-cache --configuration production",
+    "watch:lib": "ng build --project=ngx-http-cache --watch",
+    "watch:lib:prod": "ng build --project=ngx-http-cache --watch --configuration production",
+    "publish": "cd dist/ngx-http-cache && npm publish",
+    "start:api": "json-server json-server/db.json --route json-server/routes.json --no-cors true --delay 1000"
   },
   "private": true,
   "dependencies": {
@@ -23,9 +24,11 @@
     "@angular/compiler": "~12.0.0",
     "@angular/core": "~12.0.0",
     "@angular/forms": "~12.0.0",
+    "@angular/http": "^7.2.16",
     "@angular/platform-browser": "~12.0.0",
     "@angular/platform-browser-dynamic": "~12.0.0",
     "@angular/router": "~12.0.0",
+    "json-server": "^0.16.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"

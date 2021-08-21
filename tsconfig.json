@@ -12,9 +12,9 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
-      "ngx-observable-cache": [
-        "dist/ngx-observable-cache/ngx-observable-cache",
-        "dist/ngx-observable-cache"
+      "ngx-http-cache": [
+        "dist/ngx-http-cache/ngx-http-cache",
+        "dist/ngx-http-cache"
       ]
     },
     "experimentalDecorators": true,
