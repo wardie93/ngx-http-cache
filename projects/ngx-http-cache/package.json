@@ -1,11 +1,32 @@
 {
-  "name": "ngx-http-cache",
-  "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^12.0.5",
-    "@angular/core": "^12.0.5"
-  },
-  "dependencies": {
-    "tslib": "^2.1.0"
-  }
+    "name": "ngx-http-cache",
+    "version": "0.0.1",
+    "description": "Configurable caching of HTTP requests in Angular.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wardie93/ngx-http-cache.git"
+    },
+    "keywords": [
+        "Angular",
+        "Angular",
+        "ng",
+        "ngx",
+        "ngx-http-cache",
+        "Angular cache",
+        "Angular http cache",
+        "ngx cache",
+        "ngx http cache"
+    ],
+    "author": "Liam Ward",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wardie93/ngx-http-cache/issues"
+    },
+    "homepage": "https://github.com/wardie93/ngx-http-cache#readme",
+    "peerDependencies": {
+        "@angular/animations": ">=9.0.0",
+        "@angular/common": ">=9.0.0",
+        "@angular/core": ">=9.0.0",
+        "rxjs": ">=6.0.0"
+    }
 }
