@@ -12,24 +12,24 @@ import { filter, tap } from 'rxjs/operators';
 
 import {
     NGX_HTTP_CACHE_OPTIONS,
-    NgxHttpCacheBehavior,
-    NgxHttpCacheHeaders,
-    NgxHttpCacheMethod,
-    NgxHttpCacheOptions,
-} from './ngx-http-cache.options';
-import { NgxHttpCacheService } from './ngx-http-cache.service';
+    NgxHttpRequestBehavior,
+    NgxHttpRequestHeaders,
+    NgxHttpRequestMethod,
+    NgxHttpRequestOptions,
+} from './ngx-http-request-cache.options';
+import { NgxHttpRequestService } from './ngx-http-request-cache.service';
 
 @Injectable()
-export class NgxHttpCacheInterceptor implements HttpInterceptor {
-    private defaultBehavior: NgxHttpCacheBehavior;
+export class NgxHttpRequestInterceptor implements HttpInterceptor {
+    private defaultBehavior: NgxHttpRequestBehavior;
     private localStorage: boolean;
-    private methods: NgxHttpCacheMethod[];
+    private methods: NgxHttpRequestMethod[];
 
     constructor(
         @Inject(NGX_HTTP_CACHE_OPTIONS)
-        private readonly options: NgxHttpCacheOptions,
+        private readonly options: NgxHttpRequestOptions,
         private readonly router: Router,
-        private readonly cacheService: NgxHttpCacheService
+        private readonly cacheService: NgxHttpRequestService
     ) {
         this.defaultBehavior = this.options.behavior!;
         this.localStorage = this.options.localStorage!;
@@ -38,14 +38,14 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         this.router.events
             .pipe(filter($event => $event instanceof NavigationStart))
             .subscribe(() => {
-                this.cacheService.clear(NgxHttpCacheBehavior.PageLevel);
+                this.cacheService.clear(NgxHttpRequestBehavior.PageLevel);
             });
     }
 
     private getBehaviorEnum(
         enumString: string
-    ): NgxHttpCacheBehavior | undefined {
-        const enumValues = Object.values(NgxHttpCacheBehavior);
+    ): NgxHttpRequestBehavior | undefined {
+        const enumValues = Object.values(NgxHttpRequestBehavior);
 
         for (let index = 0; index < enumValues.length; index++) {
             const element = enumValues[index];
@@ -65,15 +65,15 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         const headers = request.headers;
 
         // Get the values for the headers first
-        const behaviorOverride = headers.get(NgxHttpCacheHeaders.Cache);
+        const behaviorOverride = headers.get(NgxHttpRequestHeaders.Cache);
         const localStorageOverride = headers.get(
-            NgxHttpCacheHeaders.LocalStorage
+            NgxHttpRequestHeaders.LocalStorage
         );
-        const cacheReplaceHeader = headers.get(NgxHttpCacheHeaders.Replace);
+        const cacheReplaceHeader = headers.get(NgxHttpRequestHeaders.Replace);
 
         // Then clear the values out once you know what they are, and create a new request with them removed as they
         // Should not be sent to the server
-        Object.values(NgxHttpCacheHeaders).forEach(value =>
+        Object.values(NgxHttpRequestHeaders).forEach(value =>
             headers.delete(value)
         );
 
@@ -97,7 +97,7 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         // If either the caching behavior is set to none or the behavior override is unset and the HTTP method is not set to cache
         // Then just return the request as normal
         if (
-            cachingBehaviorEnum === NgxHttpCacheBehavior.None ||
+            cachingBehaviorEnum === NgxHttpRequestBehavior.None ||
             (behaviorOverride == undefined &&
                 !this.methods.some(
                     m => m.toLowerCase() === request.method.toLowerCase()

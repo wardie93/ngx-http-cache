@@ -1,33 +1,35 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 
-import { NgxHttpCacheInterceptor } from './ngx-http-cache.interceptor';
+import {
+    NgxHttpRequestInterceptor,
+} from './ngx-http-request-cache.interceptor';
 import {
     DEFAULT_OPTIONS,
     NGX_HTTP_CACHE_OPTIONS,
-    NgxHttpCacheOptions,
-} from './ngx-http-cache.options';
+    NgxHttpRequestOptions,
+} from './ngx-http-request-cache.options';
 
-export interface NgxHttpCacheProviderOptions {
+export interface NgxHttpRequestProviderOptions {
     provider?: Provider;
-    config?: NgxHttpCacheOptions;
+    config?: NgxHttpRequestOptions;
 }
 
 @NgModule({
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
-            useClass: NgxHttpCacheInterceptor,
+            useClass: NgxHttpRequestInterceptor,
             multi: true
         }
     ]
 })
-export class NgxHttpCacheModule {
+export class NgxHttpRequestModule {
     static forRoot(
-        options?: NgxHttpCacheProviderOptions
-    ): ModuleWithProviders<NgxHttpCacheModule> {
+        options?: NgxHttpRequestProviderOptions
+    ): ModuleWithProviders<NgxHttpRequestModule> {
         return {
-            ngModule: NgxHttpCacheModule,
+            ngModule: NgxHttpRequestModule,
             providers: [
                 options?.provider || {
                     provide: NGX_HTTP_CACHE_OPTIONS,
@@ -38,7 +40,7 @@ export class NgxHttpCacheModule {
     }
 }
 
-function setDefaultOptions(options?: NgxHttpCacheOptions): NgxHttpCacheOptions {
+function setDefaultOptions(options?: NgxHttpRequestOptions): NgxHttpRequestOptions {
     const defaultOptions = DEFAULT_OPTIONS;
     return {
         behavior: options?.behavior ?? defaultOptions.behavior,

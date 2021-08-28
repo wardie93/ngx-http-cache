@@ -1,20 +1,20 @@
 import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { NgxHttpCacheBehavior } from './ngx-http-cache.options';
+import { NgxHttpRequestBehavior } from './ngx-http-request-cache.options';
 
 @Injectable({
     providedIn: 'root'
 })
-export class NgxHttpCacheService {
+export class NgxHttpRequestService {
     private cache: CachedResponse[] = [];
-    private keyPrefix = 'ngx-http-cache';
+    private keyPrefix = 'ngx-http-request-cache';
 
     constructor() { }
 
     private getExistingIndex(
         key: string | undefined,
-        behavior: NgxHttpCacheBehavior
+        behavior: NgxHttpRequestBehavior
     ): number {
         if (key == undefined) {
             return -1;
@@ -29,14 +29,14 @@ export class NgxHttpCacheService {
         return index;
     }
 
-    private getPrefix(behavior: NgxHttpCacheBehavior): string {
+    private getPrefix(behavior: NgxHttpRequestBehavior): string {
         const prefix = `${this.keyPrefix}-${behavior}`;
         return prefix;
     }
 
     private getKey(
         key: string | undefined,
-        behavior: NgxHttpCacheBehavior
+        behavior: NgxHttpRequestBehavior
     ): string | undefined {
         if (key == undefined) {
             return undefined;
@@ -54,7 +54,7 @@ export class NgxHttpCacheService {
     set(
         key: string,
         value: HttpResponse<unknown>,
-        behavior: NgxHttpCacheBehavior,
+        behavior: NgxHttpRequestBehavior,
         useLocalStorage: boolean
     ): void {
         const transformedKey = this.getKey(key, behavior);
@@ -87,7 +87,7 @@ export class NgxHttpCacheService {
 
     get(
         key: string,
-        behavior: NgxHttpCacheBehavior,
+        behavior: NgxHttpRequestBehavior,
         useLocalStorage: boolean
     ): Object | undefined {
         const transformedKey = this.getKey(key, behavior);
@@ -131,7 +131,7 @@ export class NgxHttpCacheService {
         return JSON.parse(value);
     }
 
-    clear(behavior?: NgxHttpCacheBehavior): void {
+    clear(behavior?: NgxHttpRequestBehavior): void {
         const indicesToRemove: number[] = [];
 
         this.cache.forEach((entry, index) => {
@@ -175,5 +175,5 @@ export class NgxHttpCacheService {
 class CachedResponse {
     key!: string;
     value!: string;
-    behavior!: NgxHttpCacheBehavior;
+    behavior!: NgxHttpRequestBehavior;
 }

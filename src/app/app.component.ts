@@ -1,6 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { NgxHttpCacheBehavior, NgxHttpCacheHeaders } from 'ngx-http-cache';
+import {
+    NgxHttpRequestBehavior,
+    NgxHttpRequestHeaders,
+} from 'ngx-http-request-cache';
 
 @Component({
     selector: 'app-root',
@@ -11,19 +14,19 @@ export class AppComponent {
     results: any[] = [];
     behaviors: { value: string; display: string; }[] = [];
     replaceCache = false;
-    behavior?: NgxHttpCacheBehavior;
+    behavior?: NgxHttpRequestBehavior;
 
     constructor(private readonly http: HttpClient) {
         this.behaviors.push({
-            value: NgxHttpCacheBehavior.All,
+            value: NgxHttpRequestBehavior.All,
             display: 'All'
         });
         this.behaviors.push({
-            value: NgxHttpCacheBehavior.None,
+            value: NgxHttpRequestBehavior.None,
             display: 'None'
         });
         this.behaviors.push({
-            value: NgxHttpCacheBehavior.PageLevel,
+            value: NgxHttpRequestBehavior.PageLevel,
             display: 'Page Level'
         });
     }
@@ -34,11 +37,11 @@ export class AppComponent {
         let headers = new HttpHeaders();
 
         if (this.replaceCache) {
-            headers = headers.append(NgxHttpCacheHeaders.Replace, '');
+            headers = headers.append(NgxHttpRequestHeaders.Replace, '');
         }
 
         if (this.behavior) {
-            headers = headers.append(NgxHttpCacheHeaders.Cache, this.behavior!);
+            headers = headers.append(NgxHttpRequestHeaders.Cache, this.behavior!);
         }
 
         this.http

@@ -15,7 +15,6 @@ Configurable caching of HTTP requests in Angular.
     - [Options](#options)
       - [Behavior](#behavior)
   - [Customisation](#customisation)
-  - [Clearing](#clearing)
   - [TODO](#todo)
 
 ## Demo
@@ -100,27 +99,7 @@ this.http.get<any[]>('http://localhost:3000/users', { headers: headers });
 
 ```
 
-## Clearing
-
-It is also possible to clear cached requests from both memory and local storage.
-
-
-```typescript
-
-...
-
-constructor(private readonly httpRequestCacheService: NgxHttpRequestCacheService){}
-
-...
-
-// Passing in no argument will clear all caches
-// You can also pass in a behavior that will the caches specific to that behavior
-this.httpRequestCacheService.clear();
-
-...
-
-```
-
 ## TODO
 
 1. Add timed caching
+1. If cache exists for a lower/higher level make it configurable to use it.

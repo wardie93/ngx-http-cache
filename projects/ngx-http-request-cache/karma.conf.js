@@ -27,7 +27,7 @@ module.exports = function (config) {
         coverageReporter: {
             dir: require('path').join(
                 __dirname,
-                './coverage/ngx-http-request-cache-app'
+                '../../coverage/ngx-http-request-cache'
             ),
             subdir: '.',
             reporters: [{ type: 'html' }, { type: 'text-summary' }]
