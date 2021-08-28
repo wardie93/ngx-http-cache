@@ -16,14 +16,25 @@ export enum NgxHttpCacheBehavior {
     None = 'None'
 }
 
+export enum NgxHttpCacheMethod {
+    Delete = 'DELETE',
+    Get = 'GET',
+    Head = 'HEAD',
+    Jsonp = 'JSONP',
+    Options = 'OPTIONS',
+    Patch = 'PATCH',
+    Post = 'POST',
+    Put = 'PUT'
+}
+
 export interface NgxHttpCacheOptions {
     behavior?: NgxHttpCacheBehavior;
     localStorage?: boolean;
-    methods?: string[];
+    methods?: NgxHttpCacheMethod[];
 }
 
 export const DEFAULT_OPTIONS: NgxHttpCacheOptions = {
-    behavior: NgxHttpCacheBehavior.All,
+    behavior: NgxHttpCacheBehavior.None,
     localStorage: false,
-    methods: ['GET']
+    methods: [NgxHttpCacheMethod.Get]
 };

@@ -14,6 +14,7 @@ import {
     NGX_HTTP_CACHE_OPTIONS,
     NgxHttpCacheBehavior,
     NgxHttpCacheHeaders,
+    NgxHttpCacheMethod,
     NgxHttpCacheOptions,
 } from './ngx-http-cache.options';
 import { NgxHttpCacheService } from './ngx-http-cache.service';
@@ -22,7 +23,7 @@ import { NgxHttpCacheService } from './ngx-http-cache.service';
 export class NgxHttpCacheInterceptor implements HttpInterceptor {
     private defaultBehavior: NgxHttpCacheBehavior;
     private localStorage: boolean;
-    private methods: string[];
+    private methods: NgxHttpCacheMethod[];
 
     constructor(
         @Inject(NGX_HTTP_CACHE_OPTIONS)
@@ -68,7 +69,7 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
         const localStorageOverride = headers.get(
             NgxHttpCacheHeaders.LocalStorage
         );
-        const cacheResetHeader = headers.get(NgxHttpCacheHeaders.Replace);
+        const cacheReplaceHeader = headers.get(NgxHttpCacheHeaders.Replace);
 
         // Then clear the values out once you know what they are, and create a new request with them removed as they
         // Should not be sent to the server
@@ -113,7 +114,7 @@ export class NgxHttpCacheInterceptor implements HttpInterceptor {
             localStorage
         );
 
-        if (existingValue && !cacheResetHeader) {
+        if (existingValue && !cacheReplaceHeader) {
             return of(new HttpResponse(existingValue));
         }
 
